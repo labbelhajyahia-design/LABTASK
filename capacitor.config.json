@@ -1,0 +1,9 @@
+{
+  "appId": "com.labo.taches",
+  "appName": "Tâches Labo",
+  "webDir": "www",
+  "android": { "allowMixedContent": false },
+  "plugins": {
+    "LocalNotifications": { "smallIcon": "ic_stat_task", "iconColor": "#0B5E84" }
+  }
+}

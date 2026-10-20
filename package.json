@@ -1,0 +1,23 @@
+{
+  "name": "taches-labo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Gestion des tâches du laboratoire d'analyses médicales",
+  "scripts": {
+    "sync": "cap sync android"
+  },
+  "dependencies": {
+    "@capacitor-community/speech-recognition": "6.0.1",
+    "@capacitor/android": "6.2.2",
+    "@capacitor/app": "6.0.2",
+    "@capacitor/core": "6.2.2",
+    "@capacitor/filesystem": "6.0.4",
+    "@capacitor/local-notifications": "6.1.3",
+    "@capacitor/share": "6.0.4",
+    "@zxing/library": "0.21.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "6.2.2",
+    "@fontsource/atkinson-hyperlegible": "5.3.0"
+  }
+}
