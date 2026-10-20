@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   apk:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -20,20 +20,19 @@ jobs:
           rm -rf build && mkdir build
           unzip -q LABTASK-projet.zip -d build
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 20
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 17
 
-      - uses: android-actions/setup-android@v3
-
       - name: Preparer l'appli
         working-directory: build/LABTASK
         run: |
+          echo "ANDROID_HOME=$ANDROID_HOME" && java -version && node -v
           npm ci
           chmod +x vendor.sh android/gradlew
           ./vendor.sh
