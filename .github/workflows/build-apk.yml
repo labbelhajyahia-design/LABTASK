@@ -14,48 +14,50 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Decompresser le projet
+        run: |
+          test -f LABTASK-projet.zip || { echo "Le fichier LABTASK-projet.zip est absent du depot : envoyez-le avec Add file > Upload files."; exit 1; }
+          rm -rf build && mkdir build
+          unzip -q LABTASK-projet.zip -d build
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
-          cache: gradle
 
       - uses: android-actions/setup-android@v3
 
-      - name: Installer les dépendances
-        run: npm ci
-
-      - name: Préparer l'appli
+      - name: Preparer l'appli
+        working-directory: build/LABTASK
         run: |
+          npm ci
+          chmod +x vendor.sh android/gradlew
           ./vendor.sh
           npx cap sync android
 
       - name: Compiler l'APK
-        working-directory: android
-        run: |
-          chmod +x gradlew
-          ./gradlew assembleRelease --no-daemon
+        working-directory: build/LABTASK/android
+        run: ./gradlew assembleRelease --no-daemon
 
       - name: Nommer l'APK
-        run: cp android/app/build/outputs/apk/release/app-release.apk "TachesLabo-v0.1.${{ github.run_number }}.apk"
+        run: cp build/LABTASK/android/app/build/outputs/apk/release/app-release.apk "TachesLabo-v0.1.${{ github.run_number }}.apk"
 
       - uses: actions/upload-artifact@v4
         with:
           name: TachesLabo-v0.1.${{ github.run_number }}
           path: TachesLabo-*.apk
 
-      - name: Publier dans « Releases »
+      - name: Publier dans Releases
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v0.1.${{ github.run_number }}
-          name: Tâches Labo v0.1.${{ github.run_number }}
+          name: Taches Labo v0.1.${{ github.run_number }}
           body: |
-            Version d'essai. Sur le téléphone : touchez le fichier .apk ci-dessous pour le télécharger,
-            puis ouvrez-le et acceptez l'installation (« Autoriser cette source »).
-            Les mises à jour s'installent par-dessus sans perdre les données.
+            Version d'essai. Sur le telephone : touchez le fichier .apk ci-dessous pour le telecharger,
+            puis ouvrez-le et acceptez l'installation (Autoriser cette source).
+            Les mises a jour s'installent par-dessus sans perdre les donnees.
           files: TachesLabo-v0.1.${{ github.run_number }}.apk
